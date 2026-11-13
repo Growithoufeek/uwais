@@ -144,6 +144,24 @@ html{-webkit-text-size-adjust:100%}
 </style>
 </head>
 <body>
+<audio id="theme" src="music/bcst.mp3" autoplay preload="auto"></audio>
+<script>
+(function(){
+var theme=document.getElementById('theme');
+theme.loop=false;
+var evs=['pointerdown','touchstart','touchmove','keydown'];
+function startTheme(){
+  if(theme.ended||theme.currentTime>0)return;
+  var p=theme.play();
+  if(p&&p.then)p.then(function(){
+    evs.forEach(function(e){window.removeEventListener(e,unlock,true)});
+  },function(){});
+}
+function unlock(){startTheme()}
+startTheme();
+evs.forEach(function(e){window.addEventListener(e,unlock,{capture:true,passive:true})});
+})();
+</script>
 <div id="intro" role="dialog" aria-label="Intro">
 <div><p id="tw" aria-live="polite"></p><small class="cond">Better call Uwais</small></div>
 <button id="skip" type="button">Skip</button>
